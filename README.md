@@ -40,6 +40,26 @@ Four things the staged process bought, all of them checklist items rather than t
 Neither drawing is elaborate, and that is the point: this is what a mid-size local model can
 produce when the process asks for a silhouette before it asks for detail.
 
+### The layers are why it animates
+
+<img src="creative/svg-character-design/compare/svg_character_design_animation_hyperframes.gif" width="200" align="right">
+
+Step 3 of the pipeline is a layer plan, and it is not tidiness for its own sake. It writes the
+figure as named `<g>` groups ordered back to front, along the lines of
+
+```
+back-arm → legs → torso → front-arm → head → face → props
+```
+
+so a motion tool can rotate one arm without touching the rest. A character drawn as one merged
+path can only be moved as a whole, which is where "AI-generated SVG" usually stops.
+
+On the right, the same worker driven by [HyperFrames](https://www.npmjs.com/package/hyperframes):
+twelve frames, a 1.5-second loop. Nothing was redrawn for the animation. The groups were already
+there.
+
+<br clear="all">
+
 
 ## Install
 
@@ -143,6 +163,27 @@ Hermes Agent / Claude Code 用に書いた自作スキル2本。どちらも「A
 
 どちらも凝った絵ではない。**そこが要点**で、これは中規模のローカルモデルが、
 ディテールより先にシルエットを聞かれたときに出せる水準。
+
+### レイヤーに分けたから動く
+
+<img src="creative/svg-character-design/compare/svg_character_design_animation_hyperframes.gif" width="200" align="right">
+
+工程3のレイヤー計画は、整理整頓のためではない。**図形を名前付きの `<g>` グループに、
+奥から手前の順で書かせる。**
+
+```
+back-arm → legs → torso → front-arm → head → face → props
+```
+
+こうしておくと、**片腕だけを回しても他が動かない。**
+1本のパスに統合されたキャラクターは、全体としてしか動かせない。
+「AIが描いたSVG」がたいてい止まるのはここ。
+
+右は同じ作業員を [HyperFrames](https://www.npmjs.com/package/hyperframes) で動かしたもの。
+12フレーム、1.5秒ループ。**アニメーションのために描き直したものは無い。**
+グループは最初から分かれていた。
+
+<br clear="all">
 
 
 ## 入れ方
