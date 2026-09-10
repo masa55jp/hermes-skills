@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <title>CHARACTER NAME — replace</title>
+  <!-- 1. Palette: 5–7 colors. Shadows are hue-shifted, line is a tinted dark, never #000. -->
+  <style>
+    :root {
+      --dom:     #3b6fd8;  --dom-sh:  #27499b;
+      --sec:     #f2c14e;  --sec-sh:  #b98a2f;
+      --acc:     #ff4d6d;
+      --skin:    #f7d3b0;  --skin-sh: #d9a37f;
+      --line:    #1e1a3a;  --hi:      #fff8e6;
+    }
+  </style>
+
+  <defs>
+    <!-- Reusable parts: eyes, studs, scales... place with <use>, mirror with translate(2*cx,0) scale(-1,1) -->
+    <symbol id="eye" viewBox="0 0 60 60">
+      <ellipse cx="30" cy="30" rx="22" ry="26" fill="#fff"/>
+      <ellipse cx="30" cy="34" rx="15" ry="19" fill="var(--acc)"/>
+      <ellipse cx="30" cy="38" rx="9"  ry="12" fill="var(--line)"/>
+      <ellipse cx="22" cy="24" rx="6"  ry="7"  fill="#fff"/>
+      <path d="M 7 20 Q 30 -2 53 20" fill="none" stroke="var(--line)" stroke-width="6" stroke-linecap="round"/>
+    </symbol>
+    <!-- Clip paths keep cel shadows inside their form. One per major mass. -->
+    <clipPath id="clip-head"><use href="#head-shape"/></clipPath>
+    <clipPath id="clip-torso"><use href="#torso-shape"/></clipPath>
+    <!-- Optional: single glow filter for an emissive accent -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- 2. Layers back → front. Keep this order. Every part overlaps its parent by 10–20%. -->
+  <g id="character" stroke-linejoin="round" stroke-linecap="round">
+
+    <g id="ground-shadow">
+      <ellipse cx="256" cy="484" rx="110" ry="14" fill="var(--line)" opacity=".28"/>
+    </g>
+
+    <g id="back">
+      <!-- cape / back hair / tail / wings -->
+    </g>
+
+    <g id="back-arm">
+      <!-- tapered capsule, ends UNDER the torso edge -->
+    </g>
+
+    <g id="legs">
+      <!-- back leg, then front leg; feet on ground line y≈470 -->
+    </g>
+
+    <g id="torso">
+      <path id="torso-shape" d="M 190 250 C 180 330, 190 380, 256 384 C 322 380, 332 330, 322 250 Q 256 235 190 250 Z"
+            fill="var(--dom)" stroke="var(--line)" stroke-width="5"/>
+      <g clip-path="url(#clip-torso)">
+        <path d="M 270 240 C 330 290, 320 360, 260 400 L 360 400 L 360 220 Z" fill="var(--dom-sh)"/>
+      </g>
+    </g>
+
+    <g id="front-arm">
+      <!-- tapered capsule + mitten/glove hand; holds prop if any -->
+    </g>
+
+    <g id="head">
+      <circle id="head-shape" cx="256" cy="180" r="95" fill="var(--skin)" stroke="var(--line)" stroke-width="5"/>
+      <g clip-path="url(#clip-head)">
+        <path d="M 200 90 C 300 120, 340 190, 300 290 L 370 290 L 370 70 Z" fill="var(--skin-sh)"/>
+      </g>
+      <g id="hair-back"></g>
+      <g id="face">
+        <use href="#eye" x="196" y="160" width="52" height="52"/>
+        <use href="#eye" x="264" y="160" width="52" height="52" transform="translate(580,0) scale(-1,1)"/>
+        <!-- brows carry the expression -->
+        <path d="M 204 150 Q 222 140 240 148" fill="none" stroke="var(--line)" stroke-width="5"/>
+        <path d="M 272 148 Q 290 140 308 150" fill="none" stroke="var(--line)" stroke-width="5"/>
+        <path d="M 246 232 Q 256 240 266 232" fill="none" stroke="var(--line)" stroke-width="4"/>
+        <ellipse cx="206" cy="222" rx="14" ry="8" fill="var(--acc)" opacity=".3"/>
+        <ellipse cx="306" cy="222" rx="14" ry="8" fill="var(--acc)" opacity=".3"/>
+      </g>
+      <g id="hair-front">
+        <!-- 5–9 clumps as C/S curves, each with its own shadow crescent; hair volume > skull -->
+      </g>
+    </g>
+
+    <g id="props">
+      <!-- hat, weapon tip, floating accessories -->
+    </g>
+
+    <g id="highlights">
+      <!-- 1–3 small rim/spec highlights: head, shoulder, weapon -->
+    </g>
+  </g>
+</svg>

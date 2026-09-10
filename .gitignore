@@ -1,0 +1,9 @@
+.DS_Store
+._*
+__pycache__/
+*.pyc
+
+# render_preview.py が作る一時的な出力（assets/ の見本プレビューは残す）
+*.compare.png
+*.inlined.svg
+*.export.png

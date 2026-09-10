@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <title>Chibi Knight — example (flat-vector-cel / chibi preset, light upper-left)</title>
+  <style>
+    :root {
+      --dom:     #4f7fe0;  --dom-sh:  #2f4fa8;   /* blue tabard / plume */
+      --sec:     #c9ccd6;  --sec-sh:  #7e8499;   /* steel armor */
+      --acc:     #f5b731;                        /* gold trim + eyes */
+      --skin:    #f9d9b8;  --skin-sh: #dea886;
+      --line:    #2a2440;  --hi:      #fbf7ec;
+      --hair:    #8a4b2b;  --hair-sh: #5f2f1c;
+    }
+  </style>
+  <defs>
+    <symbol id="eye" viewBox="0 0 60 60">
+      <ellipse cx="30" cy="30" rx="20" ry="25" fill="#fff"/>
+      <ellipse cx="30" cy="34" rx="14" ry="18" fill="var(--acc)"/>
+      <ellipse cx="30" cy="37" rx="9"  ry="12" fill="var(--line)"/>
+      <ellipse cx="22" cy="24" rx="6"  ry="7"  fill="#fff"/>
+      <ellipse cx="37" cy="42" rx="3"  ry="3"  fill="#fff"/>
+      <path d="M 8 18 Q 30 -4 52 18" fill="none" stroke="var(--line)" stroke-width="6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="stud" viewBox="0 0 10 10">
+      <circle cx="5" cy="5" r="4" fill="var(--acc)"/>
+      <circle cx="3.8" cy="3.8" r="1.5" fill="var(--hi)"/>
+    </symbol>
+    <clipPath id="clip-head"><circle cx="256" cy="176" r="96"/></clipPath>
+    <clipPath id="clip-torso"><use href="#torso-shape"/></clipPath>
+    <clipPath id="clip-shield"><use href="#shield-shape"/></clipPath>
+    <clipPath id="clip-cape"><use href="#cape-shape"/></clipPath>
+  </defs>
+
+  <g id="character" stroke-linejoin="round" stroke-linecap="round">
+
+    <g id="ground-shadow">
+      <ellipse cx="256" cy="486" rx="118" ry="13" fill="var(--line)" opacity=".26"/>
+    </g>
+
+    <!-- BACK: cape blowing to viewer's right (asymmetry) -->
+    <g id="back">
+      <path id="cape-shape" d="M 214 262 C 200 330, 230 410, 250 450 L 300 458 L 350 452 L 372 420 C 356 380, 352 320, 318 262 Z"
+            fill="var(--dom)" stroke="var(--line)" stroke-width="5"/>
+      <g clip-path="url(#clip-cape)">
+        <path d="M 290 250 C 330 320, 330 400, 300 470 L 400 470 L 400 240 Z" fill="var(--dom-sh)"/>
+      </g>
+    </g>
+
+    <!-- BACK ARM (viewer's right): holds shield, drawn behind torso -->
+    <g id="back-arm">
+      <path d="M 318 290 C 350 300, 372 326, 372 352 A 16 16 0 0 1 340 352 C 340 336, 326 322, 306 316 A 16 16 0 0 1 318 290 Z"
+            fill="var(--sec)" stroke="var(--line)" stroke-width="5"/>
+      <g id="shield">
+        <path id="shield-shape" d="M 352 302 L 432 302 Q 438 380, 392 420 Q 346 380, 352 302 Z"
+              fill="var(--sec)" stroke="var(--line)" stroke-width="5"/>
+        <g clip-path="url(#clip-shield)">
+          <path d="M 395 296 L 445 296 L 445 430 L 380 430 Z" fill="var(--sec-sh)"/>
+        </g>
+        <path d="M 366 312 L 418 312 Q 422 372, 392 402 Q 362 372, 366 312 Z" fill="var(--dom)" stroke="var(--acc)" stroke-width="4"/>
+        <path d="M 392 320 L 400 344 L 424 346 L 404 360 L 410 384 L 392 370 L 374 384 L 380 360 L 360 346 L 384 344 Z" fill="var(--acc)"/>
+        <path d="M 372 306 L 398 306" stroke="var(--hi)" stroke-width="3"/>
+      </g>
+    </g>
+
+    <!-- LEGS: back leg then front leg, boots on ground line y≈470 -->
+    <g id="legs">
+      <path d="M 232 378 L 234 448 A 18 18 0 0 1 200 452 L 206 378 Z" fill="var(--sec-sh)" stroke="var(--line)" stroke-width="5"/>
+      <path d="M 186 444 L 236 444 L 240 470 Q 212 478 182 470 Z" fill="var(--hair-sh)" stroke="var(--line)" stroke-width="5"/>
+      <path d="M 268 378 L 288 448 A 18 18 0 0 1 256 456 L 244 378 Z" fill="var(--sec)" stroke="var(--line)" stroke-width="5"/>
+      <path d="M 250 448 L 300 444 L 312 468 Q 284 478 252 472 Z" fill="var(--hair)" stroke="var(--line)" stroke-width="5"/>
+      <path d="M 254 452 L 298 448" stroke="var(--hair-sh)" stroke-width="4"/>
+    </g>
+
+    <!-- TORSO: armor breastplate + blue tabard + belt -->
+    <g id="torso">
+      <path id="torso-shape" d="M 196 262 C 184 320, 190 372, 256 388 C 322 372, 328 320, 316 262 Q 256 244 196 262 Z"
+            fill="var(--sec)" stroke="var(--line)" stroke-width="5"/>
+      <g clip-path="url(#clip-torso)">
+        <path d="M 276 250 C 330 300, 320 370, 262 410 L 360 410 L 360 230 Z" fill="var(--sec-sh)"/>
+        <path d="M 226 262 L 286 262 L 280 380 L 232 380 Z" fill="var(--dom)"/>
+        <path d="M 262 262 L 286 262 L 280 380 L 258 380 Z" fill="var(--dom-sh)"/>
+        <path d="M 234 274 L 278 274" stroke="var(--acc)" stroke-width="4"/>
+        <rect x="180" y="330" width="150" height="16" fill="var(--hair-sh)"/>
+        <rect x="246" y="326" width="22" height="24" rx="4" fill="var(--acc)"/>
+        <path d="M 210 258 L 226 258 L 222 320 L 210 320 Z" fill="var(--hi)" opacity=".5"/>
+      </g>
+      <use href="#stud" x="200" y="300" width="12" height="12"/>
+      <use href="#stud" x="300" y="300" width="12" height="12"/>
+    </g>
+
+    <!-- FRONT ARM (viewer's left): raised, holding sword up -->
+    <g id="front-arm">
+      <path d="M 200 284 C 176 296, 160 318, 158 348 A 16 16 0 0 0 190 350 C 192 332, 200 320, 214 312 A 16 16 0 0 0 200 284 Z"
+            fill="var(--sec)" stroke="var(--line)" stroke-width="5"/>
+      <path d="M 176 336 C 162 340, 154 348, 156 356 L 160 372 C 176 376, 192 372, 194 360 C 196 350, 190 340, 176 336 Z"
+            fill="var(--hair)" stroke="var(--line)" stroke-width="5"/>
+      <g id="sword" transform="rotate(-18 172 352)">
+        <rect x="164" y="286" width="16" height="70" rx="4" fill="var(--hair-sh)" stroke="var(--line)" stroke-width="4"/>
+        <rect x="140" y="276" width="64" height="14" rx="5" fill="var(--acc)" stroke="var(--line)" stroke-width="4"/>
+        <path d="M 160 276 L 184 276 L 178 96 L 172 78 L 166 96 Z" fill="var(--sec)" stroke="var(--line)" stroke-width="5"/>
+        <path d="M 172 276 L 184 276 L 178 96 L 172 78 Z" fill="var(--sec-sh)"/>
+        <path d="M 168 120 L 169 250" stroke="var(--hi)" stroke-width="3" opacity=".9"/>
+      </g>
+      <path d="M 168 350 L 186 346" stroke="var(--line)" stroke-width="3" opacity=".6"/>
+    </g>
+
+    <!-- HEAD: big chibi head, tilted slightly toward the sword -->
+    <g id="head" transform="rotate(-6 256 176)">
+      <path id="helmet-back" d="M 160 176 A 96 96 0 0 1 352 176 L 352 232 L 160 232 Z" fill="var(--sec-sh)"/>
+      <circle cx="256" cy="176" r="96" fill="var(--skin)" stroke="var(--line)" stroke-width="5"/>
+      <g clip-path="url(#clip-head)">
+        <path d="M 210 60 C 300 100, 350 180, 300 300 L 380 300 L 380 40 Z" fill="var(--skin-sh)"/>
+        <!-- fringe shadow on forehead -->
+        <path d="M 160 120 Q 256 160 352 120 L 352 100 L 160 100 Z" fill="var(--skin-sh)" opacity=".8"/>
+      </g>
+      <!-- hair peeking under the helmet -->
+      <path d="M 170 132 C 190 118, 210 122, 226 138 C 236 126, 252 124, 262 138 C 276 124, 298 124, 312 140 C 326 128, 342 134, 344 150"
+            fill="var(--hair)" stroke="var(--line)" stroke-width="4"/>
+      <path d="M 170 132 C 190 118, 210 122, 226 138 L 344 150 L 344 170 L 170 170 Z" fill="var(--hair)"/>
+      <path d="M 250 140 C 270 128, 300 128, 344 150 L 344 170 L 250 170 Z" fill="var(--hair-sh)"/>
+      <g id="face">
+        <use href="#eye" x="196" y="164" width="54" height="54"/>
+        <use href="#eye" x="262" y="164" width="54" height="54" transform="translate(578,0) scale(-1,1)"/>
+        <path d="M 200 156 Q 220 144 240 154" fill="none" stroke="var(--line)" stroke-width="5"/>
+        <path d="M 272 154 Q 292 144 312 156" fill="none" stroke="var(--line)" stroke-width="5"/>
+        <path d="M 244 236 Q 256 248 268 236" fill="none" stroke="var(--line)" stroke-width="4"/>
+        <ellipse cx="204" cy="226" rx="14" ry="8" fill="#f28c8c" opacity=".38"/>
+        <ellipse cx="308" cy="226" rx="14" ry="8" fill="#f28c8c" opacity=".38"/>
+      </g>
+      <!-- helmet -->
+      <path d="M 158 150 A 98 98 0 0 1 354 150 L 354 128 A 98 98 0 0 0 158 128 Z" fill="var(--sec)" stroke="var(--line)" stroke-width="5"/>
+      <path d="M 158 150 A 98 98 0 0 1 354 150" fill="none" stroke="var(--acc)" stroke-width="5"/>
+      <path d="M 176 110 A 96 96 0 0 1 336 110 L 354 128 A 98 98 0 0 0 158 128 Z" fill="var(--sec-sh)" opacity=".35"/>
+      <path d="M 236 92 Q 256 60 276 92" fill="none" stroke="var(--line)" stroke-width="5"/>
+      <!-- plume: the silhouette hook -->
+      <path d="M 256 86 C 246 40, 290 14, 318 10 C 330 40, 300 70, 270 92 Z" fill="var(--dom)" stroke="var(--line)" stroke-width="5"/>
+      <path d="M 284 70 C 300 52, 314 30, 318 10 C 330 40, 300 70, 270 92 Z" fill="var(--dom-sh)"/>
+      <path d="M 200 110 A 96 96 0 0 1 244 84" fill="none" stroke="var(--hi)" stroke-width="5" opacity=".85"/>
+    </g>
+
+    <g id="highlights">
+      <path d="M 192 268 C 186 300, 190 340, 208 366" fill="none" stroke="var(--hi)" stroke-width="4" opacity=".55"/>
+    </g>
+  </g>
+</svg>

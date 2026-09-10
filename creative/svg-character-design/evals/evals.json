@@ -1,0 +1,8 @@
+{
+  "skill_name": "svg-character-design",
+  "evals": [
+    {"id": 1, "prompt": "Draw a cute slime monster mascot for our puzzle game as an SVG. It should look friendly and work as an app icon.", "expected_output": "Brief + silhouette + layered SVG (kawaii-mascot or cute-monster preset), rendered preview, 7-point checklist answered, file saved.", "files": []},
+    {"id": 2, "prompt": "I need a JRPG-style swordswoman hero, 3/4 view, blue and white costume, in SVG for a character select screen.", "expected_output": "jrpg-hero preset, asymmetric costume, cel shadows, eyes via symbol/use, ≤7 colors, preview + checklist, ≤3 fix rounds.", "files": []},
+    {"id": 3, "prompt": "Here is my existing robot character SVG (attached). It looks flat and the arms float. Can you improve it without changing the design?", "expected_output": "Runs render+lint first, reports flags, fixes joints/overlap, adds one light direction and cel shadows, keeps silhouette and palette.", "files": ["robot.svg"]}
+  ]
+}
