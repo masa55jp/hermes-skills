@@ -12,7 +12,7 @@ it meets them, and it must say which condition it failed.
 | Skill | What it does |
 |---|---|
 | [`game-design-doc`](game-design/game-design-doc/SKILL.md) | Turns "make a game" into a design document before a line of code exists. Forces the core of the fun into a single sentence, then derives mechanics, visuals and rationale from it. Stops at the document and hands the decision back to a human. |
-| [`svg-character-design`](creative/svg-character-design/SKILL.md) | Draws game-ready characters as hand-authored SVG. Silhouette, then layer plan, then draw, then rasterize and answer a seven-point critique, then fix. Three rounds maximum. |
+| [`svg-character-design`](creative/svg-character-design/SKILL.md) | Draws game-ready characters and objects (towers, bases, rocks, props) as hand-authored SVG. Silhouette, then layer plan, then draw, then rasterize and answer a seven-point critique, then fix. Three rounds maximum. Objects get footprint, mount points for engine-animated parts, and state variants instead of anatomy. |
 | [`godot-web-export`](godot/godot-web-export/SKILL.md) | Checks a Godot export against the way it will actually run. Loads the shipped pack and replays the game's own lookups, because the editor and the export are different filesystems and the gap between them fails silently. |
 
 ## The third skill exists because the first two were not enough
@@ -155,7 +155,7 @@ Hermes Agent / Claude Code 用に書いた自作スキル3本。「AIにいき�
 | スキル | 何をするか |
 |---|---|
 | [`game-design-doc`](game-design/game-design-doc/SKILL.md) | ゲームを作る依頼を、コードを書く前に企画書に変える。面白さの核を一文で言い切らせ、そこから仕組み・絵・理由を組み立てる。企画書で止め、判断は人間に返す |
-| [`creative/svg-character-design`](creative/svg-character-design/SKILL.md) | ゲーム用キャラクターを手書きSVGで描く。シルエット → レイヤー構成 → 描画 → ラスタライズして7項目の自己批評 → 修正。最大3周 |
+| [`creative/svg-character-design`](creative/svg-character-design/SKILL.md) | ゲーム用のキャラクターと設置物（塔・基地・岩・小物）を手書きSVGで描く。シルエット → レイヤー構成 → 描画 → ラスタライズして7項目の自己批評 → 修正。最大3周。設置物は解剖学の代わりに、接地面・エンジンが動かす部品の取り付け位置・状態差分を持つ |
 | [`godot/godot-web-export`](godot/godot-web-export/SKILL.md) | 書き出したGodotを、実際に動く形で検査する。出荷する pack を読み込み、ゲームと同じ呼び出しを再現する。エディタと書き出し版は別のファイルシステムで、その差は無言で壊れる |
 
 ## 3本目がある理由 —— 前の2本では足りなかった

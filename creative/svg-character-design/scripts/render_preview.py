@@ -119,6 +119,12 @@ def lint(svg_path: str, tree: ET.ElementTree) -> list[str]:
     if len(literal) > 14:
         issues.append(f"~{len(literal)} distinct fill colors (base+shadow pairs count twice) — palette is noisy; target ≤7 bases")
 
+    # mount markers (objects): must carry coordinates the engine can read
+    for e in elems:
+        i = e.get("id") or ""
+        if i.startswith("mount-") and not (e.get("cx") and e.get("cy")):
+            issues.append(f"{i} has no cx/cy — write it as <circle id=\"{i}\" cx cy r=\"0\" fill=\"none\"/>")
+
     # placeholders
     raw = open(svg_path, encoding="utf-8", errors="ignore").read()
     if re.search(r"<!--\s*(todo|add|placeholder|fixme)", raw, re.I):
@@ -145,6 +151,16 @@ def lint(svg_path: str, tree: ET.ElementTree) -> list[str]:
         if oob:
             issues.append(f"{oob} shapes extend well outside the viewBox (ignoring transforms)")
     return issues
+
+
+def mounts(tree: ET.ElementTree) -> list[tuple[str, str, str]]:
+    """(id, cx, cy) of every mount-* marker, in viewBox units. Copy these into the engine script."""
+    out = []
+    for e in tree.getroot().iter():
+        i = e.get("id") or ""
+        if i.startswith("mount-") and e.get("cx") and e.get("cy"):
+            out.append((i, e.get("cx"), e.get("cy")))
+    return out
 
 
 # ----------------------------------------------------------------------------- rasterize
@@ -438,6 +454,13 @@ def main():
             print(" -", i)
     else:
         print(" no structural issues found")
+
+    m = mounts(tree)
+    if m:
+        vb = (tree.getroot().get("viewBox") or "0 0 512 512").replace(",", " ").split()
+        print(f"== MOUNTS == (viewBox units; engine offset from center = (cx - {vb[2]}/2, cy - {vb[3]}/2) × sprite scale)")
+        for i, cx, cy in m:
+            print(f"   {i:20} cx={cx:>6} cy={cy:>6}")
 
     src = svg
     if a.inline_vars:

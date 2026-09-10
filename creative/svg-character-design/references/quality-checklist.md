@@ -22,12 +22,20 @@ Score each item PASS / FIX. Fix in the listed order; do not polish a face on a b
 - [ ] Mouth small relative to eyes for cute styles; nose minimal.
 - [ ] Hair has volume beyond the skull and a fringe shadow on the forehead.
 
+## C′. Objects (use instead of C when the subject has no body)
+- [ ] Grounded: bottom edge on the ground line, contact shadow present, nothing hovering.
+- [ ] Stacked: each part overlaps the part below by 10–20%; no gap between body and base.
+- [ ] One identifying feature; distinguishable from its siblings in black at 64 px.
+- [ ] View angle (top-down / 3/4 / side) matches the rest of the set.
+- [ ] Every runtime-moving part has a `mount-*` marker and is NOT drawn into the body.
+- [ ] State variants are layer groups or palette variables, not separate redraws.
+
 ## D. Color & light
 - [ ] ≤ 7 colors; one dominant, one secondary, accent used in ≤ 2 spots.
 - [ ] Shadows are hue-shifted colors, not black/gray overlays.
 - [ ] One light direction; shadows on consistent sides of head, torso, limbs.
 - [ ] Adjacent regions differ enough in value to separate in grayscale.
-- [ ] Ground shadow under the feet.
+- [ ] Ground shadow under the feet / footprint.
 
 ## E. Line & finish
 - [ ] Single outline strategy across the figure (all lined or all lineless).
