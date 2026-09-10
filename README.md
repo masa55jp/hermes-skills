@@ -1,6 +1,7 @@
 # hermes-skills
 
-Two skills for Hermes Agent and Claude Code that make the model plan before it produces.
+Three skills for Hermes Agent and Claude Code that make the model plan before it produces,
+and then check what it actually produced.
 
 Both answer the same failure. Given *"build me a tower defense game"* or *"draw me a knight"*,
 a language model goes straight to output. You get a pile of features nobody asked for, or an SVG
@@ -12,6 +13,21 @@ it meets them, and it must say which condition it failed.
 |---|---|
 | [`game-design-doc`](game-design/game-design-doc/SKILL.md) | Turns "make a game" into a design document before a line of code exists. Forces the core of the fun into a single sentence, then derives mechanics, visuals and rationale from it. Stops at the document and hands the decision back to a human. |
 | [`svg-character-design`](creative/svg-character-design/SKILL.md) | Draws game-ready characters as hand-authored SVG. Silhouette, then layer plan, then draw, then rasterize and answer a seven-point critique, then fix. Three rounds maximum. |
+| [`godot-web-export`](godot/godot-web-export/SKILL.md) | Checks a Godot export against the way it will actually run. Loads the shipped pack and replays the game's own lookups, because the editor and the export are different filesystems and the gap between them fails silently. |
+
+## The third skill exists because the first two were not enough
+
+`svg-character-design` produced the worker above. It went into a Godot game, the game ran in the
+editor, and the browser build shipped with every character invisible. No exception, no warning,
+no failed load.
+
+The cause: in an exported project the source `.png` files are gone from their folder and only
+`.import` entries remain, so code that lists a directory and filters by extension collects zero
+frames. It works in the editor and returns nothing in the export.
+
+That is not a bug a debugging skill catches, because nothing reports a failure. It is caught by
+running a check against the artifact you actually ship. `godot-web-export` is that check, and it
+fails the build rather than asking anyone to be more careful.
 
 Both are tuned for mid-size local models (Qwen3.x 27B class), where "just draw it" fails hardest.
 They work the same way on a frontier model.
@@ -128,7 +144,8 @@ MIT. See [LICENSE](LICENSE).
 
 # 日本語
 
-Hermes Agent / Claude Code 用に書いた自作スキル2本。どちらも「AIにいきなり作らせない」ための道具。
+Hermes Agent / Claude Code 用に書いた自作スキル3本。「AIにいきなり作らせない」ための道具2本と、
+「作ったものが本当に動くか測る」ための道具1本。
 
 「タワーディフェンスを作って」「ナイトを描いて」と言うと、LLMは計画を飛ばして出力に走る。
 結果、誰も頼んでいない機能の寄せ集めになるか、浮いた手足と濁った色のSVGになる。
@@ -139,6 +156,20 @@ Hermes Agent / Claude Code 用に書いた自作スキル2本。どちらも「A
 |---|---|
 | [`game-design-doc`](game-design/game-design-doc/SKILL.md) | ゲームを作る依頼を、コードを書く前に企画書に変える。面白さの核を一文で言い切らせ、そこから仕組み・絵・理由を組み立てる。企画書で止め、判断は人間に返す |
 | [`creative/svg-character-design`](creative/svg-character-design/SKILL.md) | ゲーム用キャラクターを手書きSVGで描く。シルエット → レイヤー構成 → 描画 → ラスタライズして7項目の自己批評 → 修正。最大3周 |
+| [`godot/godot-web-export`](godot/godot-web-export/SKILL.md) | 書き出したGodotを、実際に動く形で検査する。出荷する pack を読み込み、ゲームと同じ呼び出しを再現する。エディタと書き出し版は別のファイルシステムで、その差は無言で壊れる |
+
+## 3本目がある理由 —— 前の2本では足りなかった
+
+`svg-character-design` で上の作業員ができた。Godotのゲームに載せ、エディタでは動いた。
+そしてブラウザ版は、**キャラクターが全員消えた状態で公開された。**
+例外も警告も、読み込み失敗も出ていない。
+
+原因は、書き出すと元の `.png` がフォルダから消えて `.import` だけが残ること。
+フォルダを一覧して拡張子で絞るコードは、**エディタで16枚・書き出し版で0枚**になる。
+
+★ これはデバッグのスキルでは捕まらない。**何も失敗を報告していない**から、調査が始まらない。
+捕まえる方法は、**実際に出荷する成果物に対して検査を通すこと**だけ。
+`godot-web-export` はその検査で、「もっと慎重に」ではなく**ビルドを落とす。**
 
 どちらも中規模のローカルLLM（Qwen3.x 27B級）を想定して調整してある。「とりあえず描いて」が
 いちばん破綻する層。フロンティアモデルでも同じように動く。
