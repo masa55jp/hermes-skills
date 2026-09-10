@@ -9,6 +9,7 @@ for s in game-design/game-design-doc creative/svg-character-design; do
   mkdir -p "$DST/$s"
   COPYFILE_DISABLE=1 rsync -rlt --delete \
     --exclude='.DS_Store' --exclude='._*' --exclude='__pycache__' \
+    --exclude='compare/' \
     "$SRC/$s/" "$DST/$s/"
   echo "installed  $s"
 done

@@ -16,6 +16,31 @@ it meets them, and it must say which condition it failed.
 Both are tuned for mid-size local models (Qwen3.x 27B class), where "just draw it" fails hardest.
 They work the same way on a frontier model.
 
+## What the process changes
+
+The same local model (Qwen3.8-27B), asked for the same character: a construction worker for a game.
+Left, drawing it directly. Right, drawing it through `svg-character-design`.
+
+| Straight to output | Through the skill |
+|:---:|:---:|
+| <img src="creative/svg-character-design/compare/svg_qwen38_original_sample.png" width="180"> | <img src="creative/svg-character-design/compare/svg_character_design_skill_sample.png" width="180"> |
+
+Four things the staged process bought, all of them checklist items rather than taste:
+
+- **The outline is no longer a blob.** The tool over the shoulder breaks the silhouette
+  diagonally, so the figure is identifiable from its shape alone. This is what the
+  silhouette-first step exists to force.
+- **Values separate.** The left figure is beige on beige, so the plank it is holding merges
+  into the torso and stops reading as an object. The right one splits into helmet, jacket
+  and boots at a glance.
+- **One light direction.** Base and shadow pairs run consistently down one side, instead of
+  flat fills.
+- **The face carries an expression.** Eyebrows and blush do the work that two dots cannot.
+
+Neither drawing is elaborate, and that is the point: this is what a mid-size local model can
+produce when the process asks for a silhouette before it asks for detail.
+
+
 ## Install
 
 ```bash
@@ -97,6 +122,28 @@ Hermes Agent / Claude Code 用に書いた自作スキル2本。どちらも「A
 
 どちらも中規模のローカルLLM（Qwen3.x 27B級）を想定して調整してある。「とりあえず描いて」が
 いちばん破綻する層。フロンティアモデルでも同じように動く。
+
+## 工程を挟むと何が変わるか
+
+同じローカルモデル（Qwen3.8-27B）に、同じお題（ゲームで使う作業員）を描かせた比較。
+左がそのまま描かせたもの、右が `svg-character-design` を通したもの。
+
+| そのまま描かせる | スキルを通す |
+|:---:|:---:|
+| <img src="creative/svg-character-design/compare/svg_qwen38_original_sample.png" width="180"> | <img src="creative/svg-character-design/compare/svg_character_design_skill_sample.png" width="180"> |
+
+変わったのは4点。**どれもセンスではなくチェック項目**で取れている。
+
+- **輪郭が塊でなくなった。** 肩に担いだ道具が斜めにシルエットを破るので、形だけで何者か分かる。
+  「先にシルエットを決めさせる」工程は、これを起こすためにある
+- **明度が分かれた。** 左はベージュの上にベージュで、抱えている板が胴に溶けて物として読めない。
+  右はヘルメット・上着・ブーツが一目で分離する
+- **光の向きが1つに揃った。** べた塗りではなく、ベース色と影色の組が片側に通っている
+- **顔に表情が乗った。** 眉と頬の赤みが、点2つでは出せない仕事をしている
+
+どちらも凝った絵ではない。**そこが要点**で、これは中規模のローカルモデルが、
+ディテールより先にシルエットを聞かれたときに出せる水準。
+
 
 ## 入れ方
 
