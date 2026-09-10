@@ -1,54 +1,131 @@
 # hermes-skills
 
-[Hermes Agent](https://github.com/) / Claude Code 向けに書いた自作スキル。
-どちらも「AIにいきなり作らせない」ための道具で、手を動かす前に通す工程を1つ足す。
+Two skills for Hermes Agent and Claude Code that make the model plan before it produces.
 
-| スキル | 何をするか |
+Both answer the same failure. Given *"build me a tower defense game"* or *"draw me a knight"*,
+a language model goes straight to output. You get a pile of features nobody asked for, or an SVG
+with floating limbs and muddy colours. Each skill puts a staged process in front of the work, and
+every stage carries **pass conditions**. The model is not allowed to call something finished until
+it meets them, and it must say which condition it failed.
+
+| Skill | What it does |
 |---|---|
-| [`game-design/game-design-doc`](game-design/game-design-doc/SKILL.md) | ゲームを作る依頼を受けたら、コードを1行も書く前に企画書を通す。面白さの核を一文で言い切らせ、各段階に通過条件を置いて、満たすまで先へ進ませない |
-| [`creative/svg-character-design`](creative/svg-character-design/SKILL.md) | ゲーム用キャラクターを手書きSVGで描く。シルエット → レイヤー構成 → 描画 → ラスタライズして自己批評 → 修正（最大3周） |
+| [`game-design-doc`](game-design/game-design-doc/SKILL.md) | Turns "make a game" into a design document before a line of code exists. Forces the core of the fun into a single sentence, then derives mechanics, visuals and rationale from it. Stops at the document and hands the decision back to a human. |
+| [`svg-character-design`](creative/svg-character-design/SKILL.md) | Draws game-ready characters as hand-authored SVG. Silhouette, then layer plan, then draw, then rasterize and answer a seven-point critique, then fix. Three rounds maximum. |
 
-## 入れ方
+Both are tuned for mid-size local models (Qwen3.x 27B class), where "just draw it" fails hardest.
+They work the same way on a frontier model.
+
+## Install
 
 ```bash
-git clone https://github.com/<user>/hermes-skills.git
+git clone git@github.com:masa55jp/hermes-skills.git
 cd hermes-skills && ./install.sh
 ```
 
-`~/.hermes/skills/` の該当フォルダだけを同期する。`creative/` には他人が作ったスキルも
-同居するので、カテゴリごと上書きはしない。別の場所に入れるなら `HERMES_SKILLS_DIR` を指定する。
+The layout mirrors `~/.hermes/skills/`, so the installer syncs only the two skill folders. It never
+overwrites a whole category, because `creative/` also holds skills written by other people. Set
+`HERMES_SKILLS_DIR` to install somewhere else.
 
-## svg-character-design が必要とするもの
+## Requirements
 
-ラスタライザが1つ要る。macOS なら:
+`game-design-doc` needs nothing.
+
+`svg-character-design` needs a rasterizer for its critique loop. On macOS:
 
 ```bash
 brew install resvg librsvg
 ```
 
-`resvg` が主力で、`librsvg` は2本目。`--compare` を付けると両方で描いて並べ、
-食い違ったピクセルの割合を出す。ゲームに載せるSVGは自分の手元にないレンダラで描かれるので、
-1つのエンジンで見て満足すると刺さる。
+Any one of `resvg`, `librsvg`, `cairosvg` (pip) or Inkscape will do. `resvg` is the default because
+it is the most faithful static SVG renderer of the four. A second engine is worth having, because
+`render_preview.py --compare` draws the file with every engine present, puts them side by side with
+a diff tile, and prints the share of pixels that disagree:
 
-どちらも無い環境では macOS 標準の `qlmanage` と headless Chrome に落ちる。ただしこの2つは
-**不透明な白背景に焼き込む**ため、シルエット確認と透明PNGの書き出しが壊れる。非常用と考える。
+```
+resvg vs rsvg      差分  1.39% のピクセル
+ → わずかな差。アンチエイリアスの違いの範囲
+```
 
-## なぜこの2つなのか
+Under half a percent is a match. A few percent is anti-aliasing. Above that, the red areas of the
+diff tile are shapes that will break in a renderer you do not control, which is the one your art
+will actually ship on.
 
-どちらも同じ失敗に対する手当て。LLMにゲームやキャラクターを作らせると、
-**計画を飛ばしていきなり出力する**。結果、機能の寄せ集めになったり、
-浮いた手足と濁った色のSVGになったりする。
+With no rasterizer installed, the script falls back to macOS `qlmanage` and headless Chrome. Both
+flatten the image onto an opaque white background, which silently breaks the silhouette check and
+transparent export. Treat them as an emergency, not a setup.
 
-そこで両方のスキルとも、工程を分けて各段階に**通過条件**を置いた。
-条件を満たさないものを「完成」と呼ばせない。判断は人間に残す。
+## Why pass conditions
 
-## 出典（game-design-doc）
+The design document skill takes its structure from a piece of advice Capcom published for a student
+competition, and the sharpest claim in it is this:
 
-カプコンが学生向けコンペ「CAPCOM GAMES COMPETITION 2027」の応募者に向けて公開した
-[「ゲーム企画書の作り方」](https://www.capcom-games.com/cgc2027/ja-jp/game-design-document/)
-の4ステップ構成を下敷きにしている。原文はスライド画像内のテキストで ©CAPCOM。
-このスキルは要点と判定基準を自分の言葉で書き直したもの。
+> If the core is good, iteration makes the game fun.
+> If the core is not good, building more of it does not.
 
-## ライセンス
+"We'll make it fun as we go" only works when the core is already good. So the question worth
+answering first is whether the core survives being written as one sentence. The same logic drives
+the SVG skill: a character that reads at 64 px was designed at the silhouette stage, and no amount
+of shading rescues one that wasn't.
 
-MIT（[LICENSE](LICENSE)）
+## Attribution
+
+`game-design-doc` builds on the four-step structure Capcom published for entrants to
+[CAPCOM GAMES COMPETITION 2027](https://www.capcom-games.com/cgc2027/ja-jp/game-design-document/).
+The original is text inside slide images, ©CAPCOM. This skill restates the points and the pass
+criteria in its own words.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
+
+---
+
+# 日本語
+
+Hermes Agent / Claude Code 用に書いた自作スキル2本。どちらも「AIにいきなり作らせない」ための道具。
+
+「タワーディフェンスを作って」「ナイトを描いて」と言うと、LLMは計画を飛ばして出力に走る。
+結果、誰も頼んでいない機能の寄せ集めになるか、浮いた手足と濁った色のSVGになる。
+そこで工程を分け、各段階に**通過条件**を置いた。満たさないものを「完成」と呼ばせない。
+未達があれば、どこが未達かを明示させる。
+
+| スキル | 何をするか |
+|---|---|
+| [`game-design-doc`](game-design/game-design-doc/SKILL.md) | ゲームを作る依頼を、コードを書く前に企画書に変える。面白さの核を一文で言い切らせ、そこから仕組み・絵・理由を組み立てる。企画書で止め、判断は人間に返す |
+| [`creative/svg-character-design`](creative/svg-character-design/SKILL.md) | ゲーム用キャラクターを手書きSVGで描く。シルエット → レイヤー構成 → 描画 → ラスタライズして7項目の自己批評 → 修正。最大3周 |
+
+どちらも中規模のローカルLLM（Qwen3.x 27B級）を想定して調整してある。「とりあえず描いて」が
+いちばん破綻する層。フロンティアモデルでも同じように動く。
+
+## 入れ方
+
+```bash
+git clone git@github.com:masa55jp/hermes-skills.git
+cd hermes-skills && ./install.sh
+```
+
+`~/.hermes/skills/` と同じ構造なので、該当2フォルダだけを同期する。`creative/` には他人が作った
+スキルも同居しているため、カテゴリごと上書きはしない。別の場所に入れるなら `HERMES_SKILLS_DIR` を指定する。
+
+## 必要なもの
+
+`game-design-doc` は何も要らない。`svg-character-design` は自己批評のためにラスタライザが1つ要る。
+
+```bash
+brew install resvg librsvg
+```
+
+`resvg` が主力。`librsvg` は2本目で、`--compare` を付けると両方で描いて並べ、食い違ったピクセルの
+割合を出す。ゲームに載せるSVGは自分の手元にないレンダラで描かれるので、1つのエンジンで見て
+満足すると刺さる。
+
+どちらも無い環境では `qlmanage` と headless Chrome に落ちるが、この2つは**不透明な白背景に
+焼き込む**ため、シルエット確認と透明PNG書き出しが壊れる。非常用と考える。
+
+## 出典
+
+`game-design-doc` は、カプコンが学生向けコンペ
+[CAPCOM GAMES COMPETITION 2027](https://www.capcom-games.com/cgc2027/ja-jp/game-design-document/)
+の応募者に向けて公開した「ゲーム企画書の作り方」の4ステップ構成を下敷きにしている。
+原文はスライド画像内のテキストで ©CAPCOM。このスキルは要点と判定基準を自分の言葉で書き直したもの。
