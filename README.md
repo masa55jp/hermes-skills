@@ -1,6 +1,6 @@
 # hermes-skills
 
-Three skills for Hermes Agent and Claude Code that make the model plan before it produces,
+Five skills for Hermes Agent and Claude Code that make the model plan before it produces,
 and then check what it actually produced.
 
 Both answer the same failure. Given *"build me a tower defense game"* or *"draw me a knight"*,
@@ -13,6 +13,8 @@ it meets them, and it must say which condition it failed.
 |---|---|
 | [`game-design-doc`](game-design/game-design-doc/SKILL.md) | Turns "make a game" into a design document before a line of code exists. Forces the core of the fun into a single sentence, then derives mechanics, visuals and rationale from it. Stops at the document and hands the decision back to a human. |
 | [`svg-character-design`](creative/svg-character-design/SKILL.md) | Draws game-ready characters and objects (towers, bases, rocks, props) as hand-authored SVG. Silhouette, then layer plan, then draw, then rasterize and answer a seven-point critique, then fix. Three rounds maximum. Objects get footprint, mount points for engine-animated parts, and state variants instead of anatomy. |
+| [`svg-game-ui`](creative/svg-game-ui/SKILL.md) | Game UI and HUD as SVG: 9-slice panels, buttons with states derived from one file, inventory slots, item and ability icons, bars as frame + fill. Ships a checker that stretches panels the way the engine will and diffs every icon pair so look-alikes get named. |
+| [`svg-tileset`](creative/svg-tileset/SKILL.md) | Seamless tiles and 16 / 47-tile autotile sets, packed into an atlas with a JSON map. The checker lays each tile next to itself and counts the rows that break at the seam, then tests every pair of variants against each other. |
 | [`godot-web-export`](godot/godot-web-export/SKILL.md) | Checks a Godot export against the way it will actually run. Loads the shipped pack and replays the game's own lookups, because the editor and the export are different filesystems and the gap between them fails silently. |
 
 ## The third skill exists because the first two were not enough
@@ -92,10 +94,10 @@ overwrites a whole category, because `creative/` also holds skills written by ot
 
 `game-design-doc` needs nothing.
 
-`svg-character-design` needs a rasterizer for its critique loop. On macOS:
+`svg-character-design`, `svg-game-ui` and `svg-tileset` need a rasterizer and Pillow. On macOS:
 
 ```bash
-brew install resvg librsvg
+brew install resvg librsvg && pip3 install pillow
 ```
 
 Any one of `resvg`, `librsvg`, `cairosvg` (pip) or Inkscape will do. `resvg` is the default because
@@ -144,8 +146,8 @@ MIT. See [LICENSE](LICENSE).
 
 # 日本語
 
-Hermes Agent / Claude Code 用に書いた自作スキル3本。「AIにいきなり作らせない」ための道具2本と、
-「作ったものが本当に動くか測る」ための道具1本。
+Hermes Agent / Claude Code 用に書いた自作スキル5本。「AIにいきなり作らせない」ための道具と、
+「作ったものが本当に動くか測る」ための道具。絵のスキルは3本とも、自分の出力を測る検査を同梱している。
 
 「タワーディフェンスを作って」「ナイトを描いて」と言うと、LLMは計画を飛ばして出力に走る。
 結果、誰も頼んでいない機能の寄せ集めになるか、浮いた手足と濁った色のSVGになる。
@@ -156,6 +158,8 @@ Hermes Agent / Claude Code 用に書いた自作スキル3本。「AIにいき�
 |---|---|
 | [`game-design-doc`](game-design/game-design-doc/SKILL.md) | ゲームを作る依頼を、コードを書く前に企画書に変える。面白さの核を一文で言い切らせ、そこから仕組み・絵・理由を組み立てる。企画書で止め、判断は人間に返す |
 | [`creative/svg-character-design`](creative/svg-character-design/SKILL.md) | ゲーム用のキャラクターと設置物（塔・基地・岩・小物）を手書きSVGで描く。シルエット → レイヤー構成 → 描画 → ラスタライズして7項目の自己批評 → 修正。最大3周。設置物は解剖学の代わりに、接地面・エンジンが動かす部品の取り付け位置・状態差分を持つ |
+| [`creative/svg-game-ui`](creative/svg-game-ui/SKILL.md) | ゲームのUIとHUDをSVGで。9分割パネル、1ファイルから状態を派生させるボタン、インベントリの枠、アイテムと能力のアイコン、枠と中身を分けたゲージ。検査はパネルをエンジンと同じ方法で引き伸ばし、アイコンの全組を比較して似すぎた組を名指しする |
+| [`creative/svg-tileset`](creative/svg-tileset/SKILL.md) | 継ぎ目のないタイルと16 / 47枚のオートタイル、アトラスとJSONへの詰め込み。検査はタイルを自分の隣に並べ、境界で途切れる行を数える。バリアント同士の総当たりも見る |
 | [`godot/godot-web-export`](godot/godot-web-export/SKILL.md) | 書き出したGodotを、実際に動く形で検査する。出荷する pack を読み込み、ゲームと同じ呼び出しを再現する。エディタと書き出し版は別のファイルシステムで、その差は無言で壊れる |
 
 ## 3本目がある理由 —— 前の2本では足りなかった

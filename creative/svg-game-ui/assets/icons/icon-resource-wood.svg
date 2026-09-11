@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><title>wood</title>
+<g stroke="#2b2320" stroke-width="2" stroke-linejoin="round">
+<rect x="4" y="15" width="22" height="9" rx="4.5" fill="#a0703c"/><circle cx="26" cy="19.5" r="4.5" fill="#d9b27c"/>
+<rect x="7" y="7" width="20" height="9" rx="4.5" fill="#b07f46"/><circle cx="7" cy="11.5" r="4.5" fill="#e0bd86"/></g>
+<circle cx="7" cy="11.5" r="1.5" fill="#a0703c"/><circle cx="26" cy="19.5" r="1.5" fill="#a0703c"/></svg>

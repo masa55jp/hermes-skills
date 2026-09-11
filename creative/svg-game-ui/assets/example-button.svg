@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 40" width="48" height="40">
+  <title>Example button (primary)</title>
+  <desc>{"kind":"nine-slice","margins":[12,12,12,12],"font_px":16}</desc>
+  <style>:root{--edge:#2b2320;--fill:#e0a83c;--fill-light:#f0c060;--accent:#f4d27a;}</style>
+  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--fill-light)"/><stop offset="1" stop-color="var(--fill)"/></linearGradient></defs>
+  <rect x="1" y="1" width="46" height="38" rx="7" fill="url(#g)" stroke="var(--edge)" stroke-width="2"/>
+  <rect x="4" y="3" width="40" height="1" fill="#fff" opacity="0.35"/>
+  <rect x="4" y="36" width="40" height="1" fill="var(--edge)" opacity="0.45"/>
+</svg>

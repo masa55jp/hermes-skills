@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>grass v2 (variant: same edges as v1, interior moved, one flower)</title>
+  <defs>
+    <g id="blade"><path d="M0 0 q3 -9 6 0 q-3 -4 -6 0z" fill="#4c7d31"/></g>
+    <g id="pebble"><ellipse rx="4" ry="2.6" fill="#6f7a5a"/><ellipse cx="-1" cy="-0.8" rx="1.6" ry="0.9" fill="#8a957a"/></g>
+  </defs>
+  <rect width="64" height="64" fill="#5a8f3c"/>
+  <ellipse cx="46" cy="42" rx="9" ry="5" fill="#548739"/>
+  <ellipse cx="16" cy="18" rx="7" ry="4" fill="#548739"/>
+  <ellipse cx="30" cy="30" rx="5" ry="3" fill="#619a42"/>
+  <use href="#blade" x="36" y="18"/><use href="#blade" x="12" y="44"/><use href="#blade" x="52" y="26"/>
+  <!-- edge-crossing shapes are IDENTICAL to grass-v1 so any variant joins any other;
+       only the interior differs -->
+  <use href="#blade" x="60" y="52"/><use href="#blade" x="-4" y="52"/>
+  <use href="#pebble" x="27" y="63"/><use href="#pebble" x="27" y="-1"/>
+  <circle cx="41" cy="55" r="2.2" fill="#e8d75a"/><circle cx="41" cy="55" r="0.9" fill="#b8892a"/>
+  <use href="#pebble" x="8" y="30"/>
+</svg>

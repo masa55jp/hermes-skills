@@ -1,0 +1,13 @@
+{
+  "skill_name": "svg-game-ui",
+  "evals": [
+    {"id": 1, "prompt": "Make the inventory screen for my RPG look good: a window, item slots in a 6x4 grid, and icons for sword, shield, bow, hp potion, mp potion, key, gold, wood.",
+     "expected_output": "Inventory list with sizes on the 8px grid; window as 9-slice with margins reported; slot.svg + slot-selected via states; 8 icons at 32px designed at 32; ui_check icons run, closest pairs named and fixed by shape; manifest.json; no text baked in; rarity stated as frame color."},
+    {"id": 2, "prompt": "I need a HUD for a tower defense: gold and wood counters, wave indicator, base HP bar, and a build button with states.",
+     "expected_output": "Counters as pill frames + 24px icons; wave frame with engine text area; HP bar delivered as frame + fill files; primary button with 4 states derived from one SVG; nine-slice check passes on every panel; nothing text/number baked."},
+    {"id": 3, "prompt": "Here is my panel.svg (attached). When Godot stretches it the top border looks smeared. Fix it.",
+     "expected_output": "Runs ui_check nine-slice first, reports which band fails and the neighbour diff, moves ornaments into corner squares, keeps gradient direction along the stretch axis, re-checks, returns margins.", "files": ["panel.svg"]},
+    {"id": 4, "prompt": "Draw a legendary sword for the reward screen, 256px.",
+     "expected_output": "Recognises this is featured item art, not an icon; routes to svg-character-design item art (or does it there), optionally noting the 32px icon should share the silhouette."}
+  ]
+}

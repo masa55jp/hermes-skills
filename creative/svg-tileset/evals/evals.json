@@ -1,0 +1,13 @@
+{
+  "skill_name": "svg-tileset",
+  "evals": [
+    {"id": 1, "prompt": "I need ground tiles for my tower defense: grass, dirt path, and the edges where they meet. 64px, top-down, same look as the attached worker sprite.",
+     "expected_output": "Tile size 64 / top-down / light top-left stated; grass and dirt base tiles seamless via wrap duplication, 2–3 variants each; 16-tile (4-bit) edge set built from three masters with rotations; tile_check seam/set/atlas run and passing; atlas.json delivered; ground contrast kept below the sprite's.", "files": ["worker.svg"]},
+    {"id": 2, "prompt": "My grass tile shows a line every 64 pixels in Godot. Here it is (attached).",
+     "expected_output": "Runs tile_check seam first, reports which edge and the seam/interior ratio, finds the shape cut at the edge, adds the wrapped <use> copy, re-checks, mentions texture filter / bleed if the seam is only visible when zoomed.", "files": ["grass.svg"]},
+    {"id": 3, "prompt": "Make a cliff tileset for an RPG.",
+     "expected_output": "Chooses 3/4 view and the 47-tile blob layout (inner corners needed), draws edge / outer corner / inner corner / interior masters, derives the rest by rotation, names files b00–b46, packs with --cols 8, explains Godot terrain set mode Match Corners and Sides."},
+    {"id": 4, "prompt": "Draw a big boulder for the map.",
+     "expected_output": "Recognises a single placed object, not a tile; routes to svg-character-design (objects.md) or asks whether it should be a tile decal."}
+  ]
+}

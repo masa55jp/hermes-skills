@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><title>potion mp</title>
+<path d="M13 3h6v6a10.5 10.5 0 1 1-6 0z" fill="#e8e2d8" stroke="#2b2320" stroke-width="2" stroke-linejoin="round"/>
+<path d="M6.3 19.5a9.7 9.7 0 0 0 19.4 0z" fill="#3f7ad1"/>
+<rect x="12" y="2" width="8" height="3" rx="1" fill="#8a6a3a" stroke="#2b2320" stroke-width="1.5"/>
+<path d="M16 20.5l1 2.2 2.4.3-1.8 1.6.5 2.4-2.1-1.2-2.1 1.2.5-2.4-1.8-1.6 2.4-.3z" fill="#fff" opacity="0.9"/></svg>

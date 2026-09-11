@@ -5,7 +5,7 @@ set -euo pipefail
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DST="${HERMES_SKILLS_DIR:-$HOME/.hermes/skills}"
 
-for s in game-design/game-design-doc creative/svg-character-design godot/godot-web-export; do
+for s in game-design/game-design-doc creative/svg-character-design creative/svg-game-ui creative/svg-tileset godot/godot-web-export; do
   mkdir -p "$DST/$s"
   COPYFILE_DISABLE=1 rsync -rlt --delete \
     --exclude='.DS_Store' --exclude='._*' --exclude='__pycache__' \
@@ -20,6 +20,6 @@ for c in game-design godot; do
 done
 
 echo
-echo "svg-character-design はラスタライザを1つ必要とします:"
-echo "  brew install resvg librsvg"
+echo "svg-character-design / svg-game-ui / svg-tileset はラスタライザを1つと Pillow を必要とします:"
+echo "  brew install resvg librsvg && pip3 install pillow"
 echo "godot-web-export は Godot 4.x を使います（GODOT 環境変数 / PATH / Godot.app を自動で探索）"

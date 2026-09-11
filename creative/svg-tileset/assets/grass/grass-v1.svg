@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>grass v1 (seamless, wrap-duplicated)</title>
+  <defs>
+    <g id="blade"><path d="M0 0 q3 -9 6 0 q-3 -4 -6 0z" fill="#4c7d31"/></g>
+    <g id="pebble"><ellipse rx="4" ry="2.6" fill="#6f7a5a"/><ellipse cx="-1" cy="-0.8" rx="1.6" ry="0.9" fill="#8a957a"/></g>
+  </defs>
+  <rect width="64" height="64" fill="#5a8f3c"/>
+  <!-- soft patches, fully inside, uneven -->
+  <ellipse cx="14" cy="40" rx="9" ry="5" fill="#548739"/>
+  <ellipse cx="44" cy="14" rx="7" ry="4" fill="#548739"/>
+  <ellipse cx="38" cy="47" rx="6" ry="3.5" fill="#619a42"/>
+  <!-- blades inside -->
+  <use href="#blade" x="20" y="22"/><use href="#blade" x="47" y="34"/><use href="#blade" x="9" y="56"/>
+  <!-- a blade crossing the RIGHT edge → wrapped copy at x-64 -->
+  <use href="#blade" x="60" y="52"/><use href="#blade" x="-4" y="52"/>
+  <!-- a pebble crossing the BOTTOM edge → wrapped copy at y-64 -->
+  <use href="#pebble" x="27" y="63"/><use href="#pebble" x="27" y="-1"/>
+</svg>

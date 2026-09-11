@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96">
+  <title>Example 9-slice panel</title>
+  <desc>{"kind":"nine-slice","margins":[24,24,24,24]}</desc>
+  <style>
+    :root{--edge:#2b2320;--panel:#6e5a4a;--panel-light:#84705e;--panel-dark:#574636;--rivet:#c9a35a;--rivet-dark:#7a5f2c;--accent:#e0a83c;}
+  </style>
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="var(--panel-light)"/><stop offset="1" stop-color="var(--panel)"/>
+    </linearGradient>
+    <g id="rivet"><circle r="4" fill="var(--rivet)"/><circle r="4" fill="none" stroke="var(--rivet-dark)" stroke-width="1.5"/><circle cx="-1.2" cy="-1.2" r="1.2" fill="#fff" opacity="0.6"/></g>
+  </defs>
+  <rect x="1" y="1" width="94" height="94" rx="8" fill="url(#body)" stroke="var(--edge)" stroke-width="2"/>
+  <rect x="3" y="3" width="90" height="1" fill="#fff" opacity="0.18"/>
+  <rect x="3" y="3" width="1" height="90" fill="#fff" opacity="0.18"/>
+  <rect x="3" y="92" width="90" height="1" fill="var(--edge)" opacity="0.5"/>
+  <rect x="92" y="3" width="1" height="90" fill="var(--edge)" opacity="0.5"/>
+  <rect x="4" y="4" width="88" height="14" fill="var(--panel-dark)"/>
+  <use href="#rivet" x="12" y="12"/><use href="#rivet" x="84" y="12"/>
+  <use href="#rivet" x="12" y="84"/><use href="#rivet" x="84" y="84"/>
+</svg>

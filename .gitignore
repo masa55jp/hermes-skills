@@ -7,3 +7,21 @@ __pycache__/
 *.compare.png
 *.inlined.svg
 *.export.png
+
+# ui_check.py / tile_check.py が作る出力（見本アセット内に溜めない）
+*.stretched.png
+*.native.png
+*.states.png
+*.normal.png
+*.hover.png
+*.pressed.png
+*.disabled.png
+*.focused.png
+*.tiled.png
+*.tiled_x3.png
+_sheet.png
+_icons_*.png
+_mixed_4x4*.png
+atlas.png
+atlas.json
+manifest.json
