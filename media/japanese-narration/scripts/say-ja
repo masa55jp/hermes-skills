@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# say-ja — 日本語ナレーションを作る（Irodori-TTS v4.1 Small / ローカル / 無料）
+#
+#   say-ja "読み上げる文章" -o out.wav          # 1本
+#   say-ja --voice male "文章" -o out.wav       # 声を変える
+#   say-ja --lines lines.json --out vo/         # まとめて（vo/01.wav, vo/02.wav …）
+#   say-ja --list                               # 使える声
+#   say-ja --check vo/*.wav                     # 書き起こして原稿と照合
+#
+# lines.json:  [ ["01","一文目。二文目。"], ["02","次のカット。"] ]
+#
+# ★台本のルール（守らないと読み間違えます）
+#   ・アルファベットの略語はカタカナに開く（HTML → エイチティーエムエル）
+#   ・固有名詞・地名も読み違える。不安ならかなに開く
+#   ・締めの一文を短くしない（短いと末尾に幻聴が出る）
+#   ・言い換えの効く熟語は平易な語に（「原価」が「玄関」と読まれた実例あり）
+#   ・ゆっくり／囁く指定は文節が脱落することがある
+#
+# 生成したら必ず --check で照合すること。読み間違いは聞かないと気づけない。
+set -uo pipefail
+PIPE="$HOME/dev/hyperframes-test"
+PY="$HOME/.venvs/hf-mlx-audio/bin/python"        # ★システムの python3 では動かない
+[ -x "$PY" ] || { echo "TTS用のvenvが無い: $PY" >&2; exit 2; }
+[ -f "$PIPE/tools/tts.py" ] || { echo "tts.py が無い: $PIPE/tools/tts.py" >&2; exit 2; }
+
+case "${1:-}" in
+  --list) exec "$PY" "$PIPE/tools/tts.py" --list ;;
+  --check) shift; exec "$PY" "$PIPE/tools/vo-check.py" "$@" ;;
+  -h|--help|"") sed -n '2,22p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+esac
+
+VOICE=female; TEXT=""; LINES=""; OUT=""; OUTDIR=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --voice) VOICE="$2"; shift 2 ;;
+    --lines) LINES="$2"; shift 2 ;;
+    -o|--out-file) OUT="$2"; shift 2 ;;
+    --out) OUTDIR="$2"; shift 2 ;;
+    -*) echo "不明なオプション: $1" >&2; exit 2 ;;
+    *) TEXT="$1"; shift ;;
+  esac
+done
+
+if [ -n "$LINES" ]; then
+  exec "$PY" "$PIPE/tools/tts.py" --voice "$VOICE" --lines "$LINES" --out "${OUTDIR:-vo}"
+fi
+[ -n "$TEXT" ] || { echo "文章か --lines を指定してください。--help で使い方" >&2; exit 2; }
+[ -n "$OUT" ]  || OUT="out.wav"
+"$PY" "$PIPE/tools/tts.py" --voice "$VOICE" --text "$TEXT" --out-file "$OUT"
