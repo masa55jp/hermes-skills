@@ -5,7 +5,7 @@ set -euo pipefail
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DST="${HERMES_SKILLS_DIR:-$HOME/.hermes/skills}"
 
-for s in game-design/game-design-doc creative/svg-character-design creative/svg-game-ui creative/svg-tileset godot/godot-web-export media/japanese-narration; do
+for s in game-design/game-design-doc creative/svg-character-design creative/svg-game-ui creative/svg-tileset godot/godot-web-export media/japanese-narration creative/comfy-rtx3060; do
   mkdir -p "$DST/$s"
   COPYFILE_DISABLE=1 rsync -rlt --delete \
     --exclude='.DS_Store' --exclude='._*' --exclude='__pycache__' \

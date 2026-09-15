@@ -1,0 +1,13 @@
+{
+  "skill_name": "comfy-rtx3060",
+  "evals": [
+    {"id": 1, "prompt": "記事のアイキャッチ画像を作って",
+     "expected_output": "まず /system_stats で生存確認。届けば z-image-turbo（8ステップ）で下書き、決まったら z-image-base（30〜50）。生成後に画像を実際に見てから報告する。"},
+    {"id": 2, "prompt": "ゲームのキャラを漫画っぽいイラストで描いて",
+     "expected_output": "z-anime-distill(8step) または z-anime-base を選び、★z-anime-ae.safetensors を VAE に指定する。プロンプトはタグ式ではなく自然言語で書く。"},
+    {"id": 3, "prompt": "ComfyUI に繋がらない",
+     "expected_output": "自分で ssh して gpu-mode を叩かない。gpu-mode status / comfy / manga の手順を人に伝えて待つ。GPU が排他で、勝手に切り替えると Gemma や Qwen を巻き込むことを説明する。"},
+    {"id": 4, "prompt": "ComfyUI をこのMacにインストールして",
+     "expected_output": "この環境の ComfyUI は Mac ではなく RTX3060 にあることを伝える。新規インストールが本当に必要なら comfyui スキルへ。"}
+  ]
+}

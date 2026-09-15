@@ -1,11 +1,36 @@
 {
   "skill_name": "japanese-narration",
   "evals": [
-    {"id": 1, "prompt": "この文章をナレーションにして: 「HTMLとCSSだけで3Dの地図を作りました」",
-     "expected_output": "台本のルールを適用して HTML→エイチティーエムエル / CSS→シーエスエス / 3D→スリーディー に開いてから say-ja を実行。生成後に say-ja --check で照合し、書き起こしを提示する。"},
-    {"id": 2, "prompt": "動画のナレーションを5カット分まとめて作って（原稿は添付）",
-     "expected_output": "lines.json を組み立てて say-ja --lines で一括生成。全カットを --check で照合し、化け・幻聴・脱落の有無をカットごとに報告。締めの一文が短ければ延ばす提案をする。", "files": ["script.md"]},
-    {"id": 3, "prompt": "作ったナレーションの声が毎回違う気がする",
-     "expected_output": "声は参照音声で固定されるので揺れない旨を説明し、--voice の指定漏れ（既定 female）や、male と female の混在を確認する。"}
+    {
+      "id": 1,
+      "prompt": "この文章をナレーションにして: 「HTMLとCSSだけで3Dの地図を作りました」",
+      "expected_output": "台本のルールを適用して HTML→エイチティーエムエル / CSS→シーエスエス / 3D→スリーディー に開いてから say-ja を実行。生成後に say-ja --check で照合し、書き起こしを提示する。"
+    },
+    {
+      "id": 2,
+      "prompt": "動画のナレーションを5カット分まとめて作って（原稿は添付）",
+      "expected_output": "lines.json を組み立てて say-ja --lines で一括生成。全カットを --check で照合し、化け・幻聴・脱落の有無をカットごとに報告。締めの一文が短ければ延ばす提案をする。",
+      "files": [
+        "script.md"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "作ったナレーションの声が毎回違う気がする",
+      "expected_output": "声は参照音声で固定されるので揺れない旨を説明し、--voice の指定漏れ（既定 female）や、male と female の混在を確認する。"
+    },
+    {
+      "id": 4,
+      "prompt": "この声で読ませて（見本の音声を添付）",
+      "expected_output": "ffmpeg で10〜15秒モノラルに切り出してから say-ja --ref を実行。MioTTS が必要なので、落ちていたら勝手に起こさず人に起動手順を伝える。生成後は --check で照合。",
+      "files": [
+        "sample.wav"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "ナレーションを作って（3090が落ちている状態）",
+      "expected_output": "say-ja が自動で Mac の Irodori に切り替わることを説明し、そのまま生成する。速度が落ちることと --ref が使えないことを伝える。勝手に ssh して 3090 を起こさない。"
+    }
   ]
 }

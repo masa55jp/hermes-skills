@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
-# say-ja — 日本語ナレーションを作る（Irodori-TTS v4.1 Small / ローカル / 無料）
+# say-ja — 日本語ナレーションを作る
+#
+#   既定は RTX3090 の MioTTS（実時間の7〜8倍速・声質の複製ができる）。
+#   届かなければ Mac の Irodori-TTS に自動で切り替える（等速・オフライン）。
 #
 #   say-ja "読み上げる文章" -o out.wav          # 1本
-#   say-ja --voice male "文章" -o out.wav       # 声を変える
-#   say-ja --lines lines.json --out vo/         # まとめて（vo/01.wav, vo/02.wav …）
-#   say-ja --list                               # 使える声
-#   say-ja --check vo/*.wav                     # 書き起こして原稿と照合
+#   say-ja --voice male "文章" -o out.wav       # 男性の声
+#   say-ja --ref 声の見本.wav "文章" -o out.wav  # ★声を複製（MioTTSのみ）
+#   say-ja --engine local "文章" -o out.wav     # Mac側を強制
+#   say-ja --lines lines.json --out vo/         # まとめて → vo/01.wav …
+#   say-ja --list                               # 声の一覧
+#   say-ja --check vo/*.wav                     # ★書き起こして照合
 #
 # lines.json:  [ ["01","一文目。二文目。"], ["02","次のカット。"] ]
 #
@@ -18,21 +23,54 @@
 #
 # 生成したら必ず --check で照合すること。読み間違いは聞かないと気づけない。
 set -uo pipefail
+MIO="http://100.117.137.5:8021"
 PIPE="$HOME/dev/hyperframes-test"
-PY="$HOME/.venvs/hf-mlx-audio/bin/python"        # ★システムの python3 では動かない
-[ -x "$PY" ] || { echo "TTS用のvenvが無い: $PY" >&2; exit 2; }
-[ -f "$PIPE/tools/tts.py" ] || { echo "tts.py が無い: $PIPE/tools/tts.py" >&2; exit 2; }
+PY="$HOME/.venvs/hf-mlx-audio/bin/python"
+TEMP=0.4; TOPP=0.8
+
+mio_up(){ curl -s -m 3 -o /dev/null "$MIO/health" 2>/dev/null; }
+
+mio_say(){ # $1=text $2=out $3=preset $4=ref(optional)
+  local req; req=$(python3 - "$1" "$3" "${4:-}" "$TEMP" "$TOPP" <<'PY'
+import json,sys,base64,os
+text,preset,ref,temp,topp=sys.argv[1:6]
+r={"type":"preset","preset_id":preset}
+if ref:
+    if not os.path.exists(ref): sys.exit(f"参照音声が無い: {ref}")
+    r={"type":"base64","data":base64.b64encode(open(ref,'rb').read()).decode()}
+print(json.dumps({"text":text,"reference":r,
+  "llm":{"temperature":float(temp),"top_p":float(topp)},
+  "output":{"format":"wav"}},ensure_ascii=False))
+PY
+) || return 1
+  curl -s -m 300 -X POST "$MIO/v1/tts" -H "Content-Type: application/json" \
+       -d "$req" -o "$2" -f 2>/dev/null
+}
+
+local_say(){ # $1=text $2=out $3=voice
+  [ -x "$PY" ] || { echo "Mac側のvenvが無い: $PY" >&2; return 2; }
+  "$PY" "$PIPE/tools/tts.py" --voice "$3" --text "$1" --out-file "$2"
+}
 
 case "${1:-}" in
-  --list) exec "$PY" "$PIPE/tools/tts.py" --list ;;
+  --list)
+    echo "MioTTS（RTX3090・既定）: jp_female / jp_male / en_female / en_male"
+    echo "  --ref 見本.wav で任意の声を複製できる（10〜15秒の見本が安全圏）"
+    echo
+    echo "Mac の Irodori（フォールバック）:"
+    "$PY" "$PIPE/tools/tts.py" --list 2>/dev/null | tail -n +2
+    exit 0 ;;
   --check) shift; exec "$PY" "$PIPE/tools/vo-check.py" "$@" ;;
-  -h|--help|"") sed -n '2,22p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+  -h|--help|"") sed -n '2,27p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
 esac
 
-VOICE=female; TEXT=""; LINES=""; OUT=""; OUTDIR=""
+VOICE=female; TEXT=""; LINES=""; OUT=""; OUTDIR=""; REF=""; ENGINE=auto
 while [ $# -gt 0 ]; do
   case "$1" in
     --voice) VOICE="$2"; shift 2 ;;
+    --ref) REF="$2"; shift 2 ;;
+    --engine) ENGINE="$2"; shift 2 ;;
+    --temp) TEMP="$2"; shift 2 ;;
     --lines) LINES="$2"; shift 2 ;;
     -o|--out-file) OUT="$2"; shift 2 ;;
     --out) OUTDIR="$2"; shift 2 ;;
@@ -41,9 +79,52 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-if [ -n "$LINES" ]; then
-  exec "$PY" "$PIPE/tools/tts.py" --voice "$VOICE" --lines "$LINES" --out "${OUTDIR:-vo}"
+# エンジンを決める
+USE=local
+if [ "$ENGINE" = "mio" ]; then
+  mio_up || { echo "MioTTS(3090) に届きません。3090 の起動を人に頼んでください:" >&2
+              echo "  ssh llm@100.117.137.5 → docker start miotts-llama →  MioCodec 起動" >&2
+              echo "  （手順はナレッジ「MioTTS音声合成_tailnet経由の使い方」）" >&2; exit 2; }
+  USE=mio
+elif [ "$ENGINE" = "local" ]; then
+  USE=local
+elif mio_up; then USE=mio
+else
+  USE=local
+  echo "※ MioTTS(3090) に届かないので Mac の Irodori に切り替えます（等速・少し遅い）" >&2
 fi
+[ -n "$REF" ] && [ "$USE" != "mio" ] && { echo "--ref（声の複製）は MioTTS 専用です。3090 が要ります" >&2; exit 2; }
+
+case "$VOICE" in
+  female|jp_female) PRESET=jp_female; LV=female ;;
+  male|jp_male)     PRESET=jp_male;   LV=male ;;
+  *)                PRESET="$VOICE";  LV=female ;;
+esac
+
+run_one(){ # $1=text $2=out
+  if [ "$USE" = "mio" ]; then
+    mio_say "$1" "$2" "$PRESET" "$REF" || { echo "  ✗ MioTTS が失敗: $2" >&2; return 1; }
+  else
+    local_say "$1" "$2" "$LV" >/dev/null || return 1
+  fi
+  echo "  ✓ $2"
+}
+
+if [ -n "$LINES" ]; then
+  D="${OUTDIR:-vo}"; mkdir -p "$D"
+  echo "エンジン: $USE / 声: ${REF:-$PRESET}"
+  python3 -c "
+import json,sys
+for n,t in json.load(open(sys.argv[1],encoding='utf-8')):
+    if t.strip(): print(n+'\t'+t)
+    else: print('  '+n+': 台本が空です。飛ばします', file=sys.stderr)
+" "$LINES" | while IFS=$'\t' read -r n t; do run_one "$t" "$D/$n.wav"; done
+  echo; echo "次: say-ja --check $D/*.wav"
+  exit 0
+fi
+
 [ -n "$TEXT" ] || { echo "文章か --lines を指定してください。--help で使い方" >&2; exit 2; }
-[ -n "$OUT" ]  || OUT="out.wav"
-"$PY" "$PIPE/tools/tts.py" --voice "$VOICE" --text "$TEXT" --out-file "$OUT"
+[ -n "$OUT" ] || OUT="out.wav"
+echo "エンジン: $USE / 声: ${REF:-$PRESET}"
+run_one "$TEXT" "$OUT"
+echo; echo "次: say-ja --check $OUT"

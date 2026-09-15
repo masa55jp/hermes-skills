@@ -1,6 +1,6 @@
 # hermes-skills
 
-Six skills for Hermes Agent and Claude Code that make the model plan before it produces,
+Seven skills for Hermes Agent and Claude Code that make the model plan before it produces,
 and then check what it actually produced.
 
 Both answer the same failure. Given *"build me a tower defense game"* or *"draw me a knight"*,
@@ -15,6 +15,7 @@ it meets them, and it must say which condition it failed.
 | [`svg-character-design`](creative/svg-character-design/SKILL.md) | Draws game-ready characters and objects (towers, bases, rocks, props) as hand-authored SVG. Silhouette, then layer plan, then draw, then rasterize and answer a seven-point critique, then fix. Three rounds maximum. Objects get footprint, mount points for engine-animated parts, and state variants instead of anatomy. |
 | [`svg-game-ui`](creative/svg-game-ui/SKILL.md) | Game UI and HUD as SVG: 9-slice panels, buttons with states derived from one file, inventory slots, item and ability icons, bars as frame + fill. Ships a checker that stretches panels the way the engine will and diffs every icon pair so look-alikes get named. |
 | [`svg-tileset`](creative/svg-tileset/SKILL.md) | Seamless tiles and 16 / 47-tile autotile sets, packed into an atlas with a JSON map. The checker lays each tile next to itself and counts the rows that break at the seam, then tests every pair of variants against each other. |
+| [`comfy-rtx3060`](creative/comfy-rtx3060/SKILL.md) | The one thing a general ComfyUI guide cannot know: where this machine's ComfyUI actually is, which four models are on it, and that the GPU is exclusive so the service may simply not be running. Tells the agent to ask a human to switch modes rather than doing it itself. |
 | [`japanese-narration`](media/japanese-narration/SKILL.md) | Japanese narration on the Mac alone — no cloud API, no cost, offline. Wraps Irodori-TTS through a single `say-ja` command, carries the script rules that stop the model mis-reading (spell acronyms in kana, never end on a short sentence), and treats transcribe-and-compare as a pass condition rather than an option. |
 | [`godot-web-export`](godot/godot-web-export/SKILL.md) | Checks a Godot export against the way it will actually run. Loads the shipped pack and replays the game's own lookups, because the editor and the export are different filesystems and the gap between them fails silently. |
 
@@ -147,7 +148,7 @@ MIT. See [LICENSE](LICENSE).
 
 # 日本語
 
-Hermes Agent / Claude Code 用に書いた自作スキル6本。「AIにいきなり作らせない」ための道具と、
+Hermes Agent / Claude Code 用に書いた自作スキル7本。「AIにいきなり作らせない」ための道具と、
 「作ったものが本当に動くか測る」ための道具。絵のスキルは3本とも、自分の出力を測る検査を同梱している。
 
 「タワーディフェンスを作って」「ナイトを描いて」と言うと、LLMは計画を飛ばして出力に走る。
@@ -161,6 +162,7 @@ Hermes Agent / Claude Code 用に書いた自作スキル6本。「AIにいき�
 | [`creative/svg-character-design`](creative/svg-character-design/SKILL.md) | ゲーム用のキャラクターと設置物（塔・基地・岩・小物）を手書きSVGで描く。シルエット → レイヤー構成 → 描画 → ラスタライズして7項目の自己批評 → 修正。最大3周。設置物は解剖学の代わりに、接地面・エンジンが動かす部品の取り付け位置・状態差分を持つ |
 | [`creative/svg-game-ui`](creative/svg-game-ui/SKILL.md) | ゲームのUIとHUDをSVGで。9分割パネル、1ファイルから状態を派生させるボタン、インベントリの枠、アイテムと能力のアイコン、枠と中身を分けたゲージ。検査はパネルをエンジンと同じ方法で引き伸ばし、アイコンの全組を比較して似すぎた組を名指しする |
 | [`creative/svg-tileset`](creative/svg-tileset/SKILL.md) | 継ぎ目のないタイルと16 / 47枚のオートタイル、アトラスとJSONへの詰め込み。検査はタイルを自分の隣に並べ、境界で途切れる行を数える。バリアント同士の総当たりも見る |
+| [`creative/comfy-rtx3060`](creative/comfy-rtx3060/SKILL.md) | 汎用のComfyUIガイドが知り得ないことだけを書いた薄いスキル。この環境のComfyUIがどこにあるか、4モデルの使い分け、GPUが排他で落ちている可能性。★落ちていたら自分で切り替えず人に頼む |
 | [`media/japanese-narration`](media/japanese-narration/SKILL.md) | 日本語ナレーションをMacだけで作る。クラウドAPI不使用・無料・オフライン。`say-ja` 一発で呼べる形にし、読み間違いを防ぐ台本のルール（英字略語はカナに開く／締めを短くしない）と、書き起こして照合する工程を通過条件にしている |
 | [`godot/godot-web-export`](godot/godot-web-export/SKILL.md) | 書き出したGodotを、実際に動く形で検査する。出荷する pack を読み込み、ゲームと同じ呼び出しを再現する。エディタと書き出し版は別のファイルシステムで、その差は無言で壊れる |
 
